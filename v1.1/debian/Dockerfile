@@ -31,7 +31,7 @@ RUN apt-get update \
  && gem install oj -v 3.3.10 \
  && gem install json -v 2.1.0 \
  && gem install fluentd -v 1.1.3 \
- && sudo gem install fluent-plugin-elasticsearch \
+ && gem install fluent-plugin-elasticsearch \
  && gem install fluent-plugin-secure-forward \
  && gem install fluent-plugin-kubernetes_metadata_filter \
  && gem install fluent-plugin-splunk-enterprise \
@@ -70,6 +70,15 @@ RUN mkdir -p /fluentd/etc /fluentd/plugins
 COPY fluent.conf /fluentd/etc/
 COPY entrypoint.sh /bin/
 RUN chmod +x /bin/entrypoint.sh
+
+RUN mkdir -p /fluentd/etc/buffer
+RUN mkdir -p /fluentd/etc/config/custom/cluster/
+RUN mkdir -p /fluentd/etc/config/custom/project/
+RUN mkdir -p /fluentd/etc/config/system/
+
+COPY custom_cluster.conf /fluentd/etc/config/custom/
+COPY custom_project.conf /fluentd/etc/config/custom/
+COPY metrics.conf /fluentd/etc/config/system/
 
 
 ENV FLUENTD_OPT=""
